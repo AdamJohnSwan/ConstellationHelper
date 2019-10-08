@@ -22,15 +22,13 @@ function placeStars() {
 	});
 }
 
+
 function placeConstellation() {
 	var stars = [[75.93331617627562, 69.50373066680365], [74.76194394856205, 80.02845567746719], [71.82411477959987, 88.84255752443084], [62.08145082114783, 68.47692129343012], [76.00966022400169, 113.5663851303301], [79.7113090845678, 142.02165070649485]]
 	var sphereMaterial = new THREE.MeshBasicMaterial({
 		color: 0xffffff
 	});
-	var lineMaterial = new THREE.LineBasicMaterial( {
-		color: 0xffffff,
-		linewidth: 1.5
-	});
+
 	var spriteMaterial = new THREE.SpriteMaterial( { color: 0xffffff } );
 	var circleGeometry = new THREE.CircleBufferGeometry( 2, 6 );
 	oldSphere = null;
@@ -45,22 +43,36 @@ function placeConstellation() {
 		sprite.scale.set(2, 2, 1.0)
 		scene.add( sprite );
 		if(idx !== 0) {
-			Promise(function(resolve, reject) {
-				resolve(drawLine(oldSphere.poistion, sphere.position));
-			});
-			var lineGeometry = new THREE.Geometry();
-			lineGeometry.vertices.push(oldSphere.position);
-			lineGeometry.vertices.push(sphere.position);
-			var line = new THREE.Line( lineGeometry, lineMaterial );
-			scene.add(line);
+			var x1 = oldSphere.position.x 
+			var y1 = oldSphere.position.y
+			var z1 = oldSphere.position.z
+			var x2 = sphere.position.x
+			var y2 = sphere.position.y
+			var z2 = sphere.position.z
+		
+			var originalDistance = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2) + Math.pow(z2 - z1, 2));
+			var segment = originalDistance / 200
+			drawLine(segment, x1, x2, y1, y2, z1, z2)
 		}
 		oldSphere = sphere
 	});
 }
 
-function drawLine() {
-	var lineMaterial = new THREE.LineBasicMaterial( {
-		color: 0xffffff,
-		linewidth: 1.5
-	});
+function drawLine(segment, x1, x2, y1, y2, z1, z2) {
+	setTimeout(
+	function() {
+		var distance = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2) + Math.pow(z2 - z1, 2));
+		var s = segment / distance;
+		var x3 = x1 + s * (x2 - x1);
+		var y3 = y1 + s * (y2 - y1);
+		var z3 = z1 + s * (z2 - z1);
+		var lineGeometry = new THREE.Geometry();
+		lineGeometry.vertices.push(new THREE.Vector3(x1, y1, z1));
+		lineGeometry.vertices.push(new THREE.Vector3(x3, y3, z3));
+		var line = new THREE.Line( lineGeometry, new THREE.LineBasicMaterial( {color: 0xffffff, linewidth: 1.5}) );
+		scene.add(line);
+		if(distance > 0.01) {
+			drawLine(segment, x3, x2, y3, y2, z3, z2)
+		}
+	}, 100);
 }

@@ -48,8 +48,6 @@ function init() {
 
 	placeLandscape();
 	placeConstellation();
-	//testPlaceStars();
 	placeStars();
-	//camera.position.x = -100
 
 }
