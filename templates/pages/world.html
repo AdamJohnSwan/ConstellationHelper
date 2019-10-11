@@ -1,0 +1,15 @@
+{% extends 'layouts/main.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<div id="direction"></div>
+<script src="/static/js/three.js"></script>
+<script src="/static/js/PointerLockControls.js"></script>
+<script src="/static/js/stars.js"></script>
+<script src="/static/js/setup.js"></script>
+<script>
+	var canvas = document.querySelector('canvas');
+	canvas.onclick = function() {
+		controls.lock();
+	};
+</script>
+{% endblock %}
