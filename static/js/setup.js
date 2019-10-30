@@ -4,6 +4,8 @@ var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHe
 var controls = new THREE.PointerLockControls( camera );
 var renderer = new THREE.WebGLRenderer();
 var directionUI = document.getElementById('direction')
+var userLat = 0;
+var userLng = 0;
 init();
 animate();
 
@@ -45,7 +47,7 @@ function init() {
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	document.body.appendChild( renderer.domElement );
 	window.addEventListener( 'resize', onWindowResize, false );
-
+	
 	placeConstellation();
 	placeStars();
 	placeLandscape();

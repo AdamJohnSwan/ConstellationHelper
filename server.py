@@ -23,7 +23,16 @@ app.config.from_object('config')
 
 @app.route('/')
 def home():
-    return render_template('pages/world.html')
+	latitude = request.args.get('lat')
+	longitude = request.args.get('lng')
+	try:
+		if(latitude is None or longitude is None):
+			raise ValueError
+		float(latitude)
+		float(longitude)
+		return render_template('pages/world.html')
+	except ValueError:
+		return render_template('pages/home.html')
 
 @app.route('/constellation')
 def constellation():

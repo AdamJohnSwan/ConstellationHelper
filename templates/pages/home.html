@@ -1,0 +1,22 @@
+{% extends 'layouts/main.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<div id="home-container">
+	<form id="location-form">
+		<input placeholder="Latitude" name="lat" />
+		<input placeholder="Longitude" name="lng" />
+		<button type="submit">Go</button>
+	</form>
+</div>
+<script>
+	if (navigator.geolocation) {
+		navigator.geolocation.getCurrentPosition(function(position) {
+			console.log(position.coords.latitude);
+			console.log(position.coords.longitude);
+			window.location.replace("/?lat=" + position.coords.latitude + "&lng=" + position.coords.longitude)
+		});
+	} else {
+		console.log("Geolocation is not supported by this browser.");
+	}
+</script>
+{% endblock %}
