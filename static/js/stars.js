@@ -72,8 +72,6 @@ function placeConstellation() {
 				averageX = averageX / stars.length;
 				averageY = averageY / stars.length;
 				averageZ = averageZ / stars.length;
-				//camera.lookAt(new THREE.Vector3(averageX, averageY, averageZ));
-				
 				constLoaded = true;
 				checkForLoading();
 			} else if (result[0] === 2) {

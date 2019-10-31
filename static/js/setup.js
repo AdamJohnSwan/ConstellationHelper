@@ -6,7 +6,7 @@ var renderer = new THREE.WebGLRenderer();
 var directionUI = document.getElementById('direction')
 var userLat = 0;
 var userLng = 0;
-var starsLoaded = true;
+var starsLoaded = false;
 var constLoaded = false;
 init();
 animate();
@@ -51,7 +51,9 @@ function checkForLoading() {
 		placeLandscape();
 		placeSpace();
 		lookAtConstellation();
-		drawConstellation();
+		setTimeout(function(){
+			 drawConstellation();
+		}, 3000);
 		var loader = document.getElementsByClassName("loader-container")[0];
 		loader.style.display = 'none';
 	}
