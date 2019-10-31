@@ -1,3 +1,8 @@
+var constellationPositions = [];
+var averageX = 0;
+var averageY = 0;
+var averageZ = 0;
+
 function placeStars() {
 	makeRequest('/sky')
 		.then(result => {
@@ -25,6 +30,8 @@ function placeStars() {
 					sprite.scale.set(size, size, 1.0)
 					scene.add( sprite );
 				});
+				starsLoaded = true;
+				checkForLoading();
 			} else if (result[0] === 2) {
 				return Promise.reject('No content')
 			}
@@ -42,13 +49,10 @@ function placeConstellation() {
 				var sphereMaterial = new THREE.MeshBasicMaterial({
 					color: 0xffffff
 				});
-				var averageX = 0;
-				var averageY = 0;
-				var averageZ = 0;
 				var spriteMaterial = new THREE.SpriteMaterial( { color: 0xffffff } );
 				var circleGeometry = new THREE.CircleBufferGeometry( 2, 6 );
 				oldSphere = null;
-				stars.forEach(function(star, idx) {
+				stars.forEach(function(star) {
 					var sphere = new THREE.Mesh( circleGeometry, sphereMaterial );
 					
 					sphere.rotateY(star.azm * (Math.PI / 180))
@@ -58,19 +62,8 @@ function placeConstellation() {
 					sprite.position.set(sphere.position.x, sphere.position.y, sphere.position.z)
 					sprite.scale.set(2, 2, 1.0)
 					scene.add( sprite );
-					if(idx !== 0) {
-						var x1 = oldSphere.position.x 
-						var y1 = oldSphere.position.y
-						var z1 = oldSphere.position.z
-						var x2 = sphere.position.x
-						var y2 = sphere.position.y
-						var z2 = sphere.position.z
-					
-						var originalDistance = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2) + Math.pow(z2 - z1, 2));
-						var segment = originalDistance / 200
-						drawLine(segment, x1, x2, y1, y2, z1, z2)
-					}
-					oldSphere = sphere
+					//Add to an array so lines can be drawn later
+					constellationPositions.push(sphere.position);
 					//Get the average vector to know where to point the observer
 					averageX = averageX + sphere.position.x;
 					averageY = averageY + sphere.position.y;
@@ -79,13 +72,51 @@ function placeConstellation() {
 				averageX = averageX / stars.length;
 				averageY = averageY / stars.length;
 				averageZ = averageZ / stars.length;
-				camera.lookAt(new THREE.Vector3(averageX, averageY, averageZ));
+				//camera.lookAt(new THREE.Vector3(averageX, averageY, averageZ));
+				
+				constLoaded = true;
+				checkForLoading();
 			} else if (result[0] === 2) {
 				return Promise.reject('No content')
 			}
 		}).catch(err => console.log(err))
 	
 	
+}
+
+function lookAtConstellation() {
+	position = new THREE.Vector3(averageX, averageY, averageZ);
+	// backup original rotation
+	var startRotation = new THREE.Euler().copy( camera.rotation );
+
+	// final rotation (with lookAt)
+	camera.lookAt( position );
+	var endRotation = new THREE.Euler().copy( camera.rotation );
+
+	// revert to original rotation
+	camera.rotation.copy( startRotation );
+
+	// Tween
+	new TWEEN.Tween(camera.rotation).to({x: endRotation.x, y: endRotation.y, z: endRotation.z}, 2000).start()
+}
+
+function drawConstellation() {
+	oldPos = null;
+	constellationPositions.forEach(function(pos, idx) {
+		if(idx !== 0) {
+			var x1 = oldPos.x 
+			var y1 = oldPos.y
+			var z1 = oldPos.z
+			var x2 = pos.x
+			var y2 = pos.y
+			var z2 = pos.z
+		
+			var originalDistance = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2) + Math.pow(z2 - z1, 2));
+			var segment = originalDistance / 200
+			drawLine(segment, x1, x2, y1, y2, z1, z2)
+		}
+		oldPos = pos
+	});
 }
 
 function drawLine(segment, x1, x2, y1, y2, z1, z2) {

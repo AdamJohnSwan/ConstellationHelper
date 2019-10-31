@@ -6,11 +6,14 @@ var renderer = new THREE.WebGLRenderer();
 var directionUI = document.getElementById('direction')
 var userLat = 0;
 var userLng = 0;
+var starsLoaded = true;
+var constLoaded = false;
 init();
 animate();
 
 function animate() {
 	requestAnimationFrame( animate );
+	TWEEN.update()
 	renderer.render( scene, camera );
 }
 
@@ -43,13 +46,23 @@ function placeLandscape() {
 	scene.add(plane);
 }
 
+function checkForLoading() {
+	if(starsLoaded && constLoaded) {
+		placeLandscape();
+		placeSpace();
+		lookAtConstellation();
+		drawConstellation();
+		var loader = document.getElementsByClassName("loader-container")[0];
+		loader.style.display = 'none';
+	}
+}
+
 function init() {
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	document.body.appendChild( renderer.domElement );
 	window.addEventListener( 'resize', onWindowResize, false );
 	
-	placeConstellation();
 	placeStars();
-	placeLandscape();
+	placeConstellation();
 
 }
