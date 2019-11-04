@@ -8,6 +8,7 @@
 		<button type="submit">Go</button>
 	</form>
 </div>
+<script type="text/javascript" src="/static/js/starfield.js"></script>
 <script>
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(position) {
@@ -18,5 +19,10 @@
 	} else {
 		console.log("Geolocation is not supported by this browser.");
 	}
+	
+	var container = document.getElementById('content');
+	var starfield = new Starfield();
+	starfield.initialise(container);
+	starfield.start();
 </script>
 {% endblock %}

@@ -24,9 +24,9 @@ body, html {
 #location-form {
 	margin: 0 auto;
 	width: 400px;
-	background-color: #003366;
+	background-color: rgba(180, 180, 180, 0.2);
 	margin: 0 auto;
-	color: #ffffff;
+	color: white;
 	min-height: 10em;
 	display: flex;
 	flex-direction: column;
@@ -34,23 +34,26 @@ body, html {
 	border-radius: 5px;
 }
 #location-form input, #location-form button {
-	color: #003366;
+	background-color: transparent;
+	color: white;
 	width: 60%;
 	display:block;
-	border-radius: 5px;
 	font-size: 1.4em;
 	margin: 5px auto;
 	padding: 5px 0px 5px 0px;	
 	outline: 0;
 	border: 0;
+	border-bottom: 1px solid white;
 }
 
 #location-form button {
 	cursor: pointer;
 	padding: 5px 0px 5px 0px;	
 	text-align: center;
-	background-color: #ffffff;
-	color: #003366;
+	background-color: #003366;
+	color: white;
+	border: 0;
+	border-radius: 5px;
 }
 
 /* Safari */
