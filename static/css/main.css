@@ -10,19 +10,13 @@ body, html {
     left: 50%;
     transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%); /* IE 9 */
-    -webkit-transform: translate(-50%, -50%); /* Chrome, Safari, Opera */	    
-}
-
-#home-container {
-	width: 100%;
-	height: 100%;
+    -webkit-transform: translate(-50%, -50%); /* Chrome, Safari, Opera */	
 	display:flex;
 	flex-direction: column;
-	justify-content: center;
+	justify-content: center;    
 }
 
 #location-form {
-	margin: 0 auto;
 	width: 400px;
 	background-color: rgba(180, 180, 180, 0.2);
 	margin: 0 auto;
@@ -33,7 +27,7 @@ body, html {
 	justify-content: center;
 	border-radius: 5px;
 }
-#location-form input, #location-form button {
+input, button {
 	background-color: transparent;
 	color: white;
 	width: 60%;
@@ -46,7 +40,7 @@ body, html {
 	border-bottom: 1px solid white;
 }
 
-#location-form button {
+button {
 	cursor: pointer;
 	padding: 5px 0px 5px 0px;	
 	text-align: center;
@@ -90,4 +84,23 @@ body, html {
 }
 .hidden {
 	display: none;
+}
+.constellation-form {
+	position: absolute;
+    top: 90%;
+    left: 50%;
+    transform: translate(-50%, -90%);
+    -ms-transform: translate(-50%, -90%); /* IE 9 */
+    -webkit-transform: translate(-50%, -90%); /* Chrome, Safari, Opera */	
+}
+.constellation-form form {
+	width: 400px;
+	background-color: rgba(180, 180, 180, 0.2);
+	margin: 0 auto;
+	color: white;
+	min-height: 2.2em;
+	padding: 5px 20px;
+}
+.constellation-form input {
+	width: 100%;
 }

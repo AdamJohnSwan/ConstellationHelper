@@ -6,7 +6,7 @@ var renderer = new THREE.WebGLRenderer();
 var directionUI = document.getElementById('direction')
 var userLat = 0;
 var userLng = 0;
-var starsLoaded = false;
+var starsLoaded = true;
 var constLoaded = false;
 init();
 animate();
@@ -67,4 +67,8 @@ function init() {
 	placeStars();
 	placeConstellation();
 
+}
+
+function checkAnswer() {
+	debugger;
 }

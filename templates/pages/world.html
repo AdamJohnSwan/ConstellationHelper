@@ -5,6 +5,11 @@
 <div class="loader-container">
 	<div class="loader"></div>
 </div>
+<div class="constellation-form">
+	<form id="constellation-form" onsubmit="checkAnswer(e)">
+		<input type="text" name="constellation-input" id="constellation-input" placeholder="Type your answer...">
+	</form>
+</div>
 <script src="/static/js/three.js"></script>
 <script src="/static/js/tween.js"></script>
 <script src="/static/js/PointerLockControls.js"></script>
@@ -15,5 +20,13 @@
 	canvas.onclick = function() {
 		controls.lock();
 	};
+	
+	document.getElementById("constellation-form").onkeypress = function(e) {
+	var key = e.charCode || e.keyCode || 0;     
+	if (key == 13) {
+		e.preventDefault();
+		checkAnswer();
+	}
+}
 </script>
 {% endblock %}
