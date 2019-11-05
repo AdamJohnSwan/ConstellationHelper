@@ -36,15 +36,25 @@ def home():
 
 @app.route('/constellation')
 def constellation():
-	constellation = request.args.get('const')
-	if(constellation is None):
-		return stars.constellation("andromeda")
-	else:
-		return stars.constellation(constellation.lower())
+	try:
+		constellation = request.args.get('const')
+		latitude = float(request.args.get('lat'))
+		longitude = float(request.args.get('lng'))
+		if(constellation is None):
+			return stars.constellation(latitude, longitude, "andromeda")
+		else:
+			return stars.constellation(latitude, longitude, constellation.lower())
+	except ValueError:
+		abort(400)
 
 @app.route('/sky')
 def sky():
-    return stars.sky()
+	try:
+		latitude = float(request.args.get('lat'))
+		longitude = float(request.args.get('lng'))
+		return stars.sky(latitude, longitude)
+	except ValueError:
+		abort(400)
 
 # Error handlers.
 @app.errorhandler(500)

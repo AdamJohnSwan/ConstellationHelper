@@ -1,27 +1,28 @@
 from skyfield.api import Star, Topos, Loader
 from skyfield.data import hipparcos
+from datetime import date
 import json
 import os
 import pdb
 
 folder = os.path.dirname(os.path.realpath(__file__))
 
-def prepare():
+def prepare(latitude, longitude):
 	load = Loader(folder + '/skyfield-data', verbose=True)
 	with load.open(hipparcos.URL) as f:
 			df = hipparcos.load_dataframe(f)
 		
 	planets = load('de421.bsp')
 	earth = planets['earth']
-	watcher = earth + Topos('37.538261 N', '77.435060 W')
+	watcher = earth + Topos(latitude_degrees=latitude, longitude_degrees=longitude)
 
 	ts = load.timescale()
-	# t = ts.now()
-	t = ts.utc(2019, 10, 4, 4, 00, 00)
+	today = date.today()
+	t = ts.utc(today.year, today.month, today.day, 10, 00, 00)
 	return df, t, watcher
 
-def constellation(name):
-	df, t, watcher = prepare()
+def constellation(latitude, longitude, name):
+	df, t, watcher = prepare(latitude, longitude)
 	locations = []
 	filepath = folder + '/constellations/' + name + '.txt'
 	with open(filepath) as f:
@@ -40,8 +41,8 @@ def constellation(name):
 	
 	return json.dumps({"stars": locations})
 
-def sky():
-	df, t, watcher = prepare()
+def sky(latitude, longitude):
+	df, t, watcher = prepare(latitude, longitude)
 	locations = []
 	# filter out stars that don't have location
 	df = df[df['ra_degrees'].notnull()]

@@ -4,7 +4,7 @@ var averageY = 0;
 var averageZ = 0;
 
 function placeStars() {
-	makeRequest('/sky')
+	makeRequest('/sky' + window.location.search)
 		.then(result => {
 			if (result[0] === 1) {
 				return Promise.reject(result[1])
@@ -40,7 +40,7 @@ function placeStars() {
 
 
 function placeConstellation() {
-	makeRequest('/constellation?const=andromeda_new')
+	makeRequest('/constellation' + window.location.search + '&const=andromeda_new')
 		.then(result => {
 			if (result[0] === 1) {
 				return Promise.reject(result[1])
