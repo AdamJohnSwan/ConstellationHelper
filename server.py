@@ -4,6 +4,7 @@
 
 from flask import Flask, render_template, request
 import logging
+import requests
 from logging import Formatter, FileHandler
 import os
 import sys
@@ -33,6 +34,12 @@ def home():
 		return render_template('pages/world.html')
 	except ValueError:
 		return render_template('pages/home.html')
+
+@app.route('/get-location')
+def get_location():
+	ip = request.remote_addr
+	response = requests.get("https://extreme-ip-lookup.com/json/") #+ ip)
+	return response.text
 
 @app.route('/constellation')
 def constellation():

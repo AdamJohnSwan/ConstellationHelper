@@ -1,13 +1,21 @@
 {% extends 'layouts/main.html' %}
 {% block title %}Home{% endblock %}
 {% block content %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+	integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+	crossorigin=""/>
+
 <div id="home-container">
 	<form id="location-form">
-		<input placeholder="Latitude" name="lat" />
-		<input placeholder="Longitude" name="lng" />
+		<input placeholder="Latitude" name="lat" id="lat" />
+		<input placeholder="Longitude" name="lng" id="lng" />
+		<div style="height: 220px;"id="mapid"></div>
 		<button type="submit">Go</button>
 	</form>
 </div>
+<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+	integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+	crossorigin=""></script>
 <script type="text/javascript" src="/static/js/starfield.js"></script>
 <script>
 	if (navigator.geolocation) {
@@ -24,5 +32,32 @@
 	var starfield = new Starfield();
 	starfield.initialise(container);
 	starfield.start();
+	
+	//Start map
+	var map = L.map('mapid')
+		.setView([0, 0], 2);
+	var marker = L.marker([0,0]).addTo(map);
+	//Guess the user's location from their IP
+	fetch('/get-location')
+		.then( res => res.json())
+		.then(response => {
+			updateLocation(response.lat, response.lon);
+		})
+		.catch((data, status) => {
+			console.log('Request failed: ' +  data);
+	});
+	L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+	}).addTo(map);
+	map.on('click', function(e) {
+		updateLocation(e.latlng.lat, e.latlng.lng);
+	});
+	
+	function updateLocation(lat, lng) {
+		marker.setLatLng([lat, lng]);
+		map.setView([lat, lng]);
+		document.getElementById("lat").value = lat;
+		document.getElementById("lng").value = lng;
+	}
 </script>
 {% endblock %}
