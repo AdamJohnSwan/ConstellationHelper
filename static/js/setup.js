@@ -6,7 +6,7 @@ var renderer = new THREE.WebGLRenderer();
 var directionUI = document.getElementById('direction')
 var userLat = 0;
 var userLng = 0;
-var starsLoaded = true;
+var starsLoaded = false;
 var constLoaded = false;
 init();
 animate();
