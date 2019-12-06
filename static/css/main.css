@@ -92,6 +92,7 @@ button {
     transform: translate(-50%, -90%);
     -ms-transform: translate(-50%, -90%); /* IE 9 */
     -webkit-transform: translate(-50%, -90%); /* Chrome, Safari, Opera */	
+	display: flex;
 }
 .constellation-form form {
 	width: 400px;
@@ -103,4 +104,16 @@ button {
 }
 .constellation-form input {
 	width: 100%;
+}
+
+.constellation-form #timer {
+	color:white;
+	background-color: rgba(180, 180, 180, 0.2);
+	font-size: 2.0em;
+	font-family: sans-serif;
+	text-align:center;
+	padding: 5px 20px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 }

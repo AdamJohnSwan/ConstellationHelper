@@ -6,6 +6,7 @@ var renderer = new THREE.WebGLRenderer();
 var directionUI = document.getElementById('direction')
 var userLat = 0;
 var userLng = 0;
+var timer = 0;
 var starsLoaded = false;
 var constLoaded = false;
 init();
@@ -56,6 +57,12 @@ function checkForLoading() {
 		}, 3000);
 		var loader = document.getElementsByClassName("loader-container")[0];
 		loader.style.display = 'none';
+		//Start the timer
+		var timerSpan = document.getElementById("timer").getElementsByTagName("span")[0];
+		setInterval(function(){
+			timer++;
+			timerSpan.innerHTML = timer.toString();
+		}, 1000);
 	}
 }
 
