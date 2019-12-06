@@ -2,6 +2,7 @@ from skyfield.api import Star, Topos, Loader
 from skyfield.data import hipparcos
 from datetime import date
 import json
+import random
 import os
 import pdb
 
@@ -21,25 +22,35 @@ def prepare(latitude, longitude):
 	t = ts.utc(today.year, today.month, today.day, 10, 00, 00)
 	return df, t, watcher
 
-def constellation(latitude, longitude, name):
+def constellation(latitude, longitude, name=None):
 	df, t, watcher = prepare(latitude, longitude)
 	locations = []
-	filepath = folder + '/constellations/' + name + '.txt'
+	filepath = ''
+	if(name is None):
+		filenames = os.listdir(folder + '/constellations/')
+		filename = random.choice(filenames)
+		filepath = folder + '/constellations/' + filename
+		name = filename.replace('.txt', '')
+	else:
+		filepath = folder + '/constellations/' + name + '.txt'
+	
 	with open(filepath) as f:
-		star_numbers = f.read().splitlines() 
+		star_numbers = f.read().splitlines()
 	
 	for i, star_number in enumerate(star_numbers):
 		star = Star.from_dataframe(df.loc[int(star_number)])
 		astrometric = watcher.at(t).observe(star)
 		apparent = astrometric.apparent()
 		star_alt, star_az, distance = apparent.altaz()
+		if(star_alt.degrees < 0):
+			return constellation(latitude, longitude)
 		locations.append({
 			"alt": star_alt.degrees,
 			"azm": star_az.degrees,
 			"mag": df.iloc[i]['magnitude']
 		})
-	
-	return json.dumps({"stars": locations})
+	print(name)
+	return json.dumps({"stars": locations, "constellation": name})
 
 def sky(latitude, longitude):
 	df, t, watcher = prepare(latitude, longitude)

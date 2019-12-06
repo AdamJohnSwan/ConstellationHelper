@@ -48,7 +48,7 @@ def constellation():
 		latitude = float(request.args.get('lat'))
 		longitude = float(request.args.get('lng'))
 		if(constellation is None):
-			return stars.constellation(latitude, longitude, "andromeda")
+			return stars.constellation(latitude, longitude)
 		else:
 			return stars.constellation(latitude, longitude, constellation.lower())
 	except ValueError:

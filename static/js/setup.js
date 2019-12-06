@@ -57,6 +57,8 @@ function checkForLoading() {
 		}, 3000);
 		var loader = document.getElementsByClassName("loader-container")[0];
 		loader.style.display = 'none';
+		// Set focus to the input used to guess the name of the contellation
+		document.getElementById("constellation-input").focus();
 		//Start the timer
 		var timerSpan = document.getElementById("timer").getElementsByTagName("span")[0];
 		setInterval(function(){
