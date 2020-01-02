@@ -35,10 +35,10 @@
 	
 	//Start map
 	var map = L.map('mapid')
-		.setView([0, 0], 2);
+		.setView([0, 0], 5);
 	var marker = L.marker([0,0]).addTo(map);
 	//Guess the user's location from their IP
-	fetch('/get-location')
+	fetch('/location')
 		.then( res => res.json())
 		.then(response => {
 			updateLocation(response.lat, response.lon);

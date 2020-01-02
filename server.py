@@ -35,10 +35,13 @@ def home():
 	except ValueError:
 		return render_template('pages/home.html')
 
-@app.route('/get-location')
+@app.route('/location')
 def get_location():
 	ip = request.remote_addr
-	response = requests.get("https://extreme-ip-lookup.com/json/") #+ ip)
+	if(ip == "127.0.0.1"):
+		# When running locally the IP will be the loopback address, which doesn't have a location.
+		ip = ""
+	response = requests.get("https://extreme-ip-lookup.com/json/" + ip)
 	return response.text
 
 @app.route('/constellation')
