@@ -85,7 +85,8 @@ button {
 .hidden {
 	display: none;
 }
-.constellation-form {
+#constellation-form-container {
+	background-color: rgba(180, 180, 180, 0.2);
 	position: absolute;
     top: 90%;
     left: 50%;
@@ -94,21 +95,19 @@ button {
     -webkit-transform: translate(-50%, -90%); /* Chrome, Safari, Opera */	
 	display: flex;
 }
-.constellation-form form {
+#constellation-form-container form {
 	width: 400px;
-	background-color: rgba(180, 180, 180, 0.2);
 	margin: 0 auto;
 	color: white;
 	min-height: 2.2em;
 	padding: 5px 20px;
 }
-.constellation-form input {
+#constellation-form-container input {
 	width: 100%;
 }
 
-.constellation-form #timer {
+#constellation-form-container #timer {
 	color:white;
-	background-color: rgba(180, 180, 180, 0.2);
 	font-size: 2.0em;
 	font-family: sans-serif;
 	text-align:center;
@@ -116,4 +115,59 @@ button {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
+	min-width: 60px;
+}
+
+.wrong-answer {
+	animation-duration: 1s;
+	animation-name: flashred;
+}
+
+.right-answer {
+	animation-duration: 1s;
+	animation-name: flashgreen;
+}
+
+@keyframes flashgreen {
+	from {
+		background-color: rgba(180, 180, 180, 0.2);
+	}
+
+	25% {
+		background-color: rgba(0, 255, 0, 0.5);
+	}
+	
+	50% {
+		background-color: rgba(180, 180, 180, 0.2);
+	}
+
+	75% {
+		background-color: rgba(0, 255, 0, 0.5);
+	}
+
+	to {
+		background-color: rgba(180, 180, 180, 0.2);
+	}
+}
+
+@keyframes flashred {
+	from {
+		background-color: rgba(180, 180, 180, 0.2);
+	}
+
+	25% {
+		background-color: rgba(255, 0, 0, 0.5);
+	}
+	
+	50% {
+		background-color: rgba(180, 180, 180, 0.2);
+	}
+
+	75% {
+		background-color: rgba(255, 0, 0, 0.5);
+	}
+
+	to {
+		background-color: rgba(180, 180, 180, 0.2);
+	}
 }

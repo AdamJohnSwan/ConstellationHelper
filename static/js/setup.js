@@ -9,6 +9,7 @@ var userLng = 0;
 var timer = 0;
 var starsLoaded = false;
 var constLoaded = false;
+var timerInterval = null;
 init();
 animate();
 
@@ -33,11 +34,6 @@ function updateDirection() {
 	directionUI.innerHTML = 'X: ' + x + ' Y: ' + y + ' Z: ' + z;
 }
 
-
-function placeSpace() {
-	
-}
-
 function placeLandscape() {
 	var geometry = new THREE.PlaneGeometry(200, 200);
 	var material = new THREE.MeshBasicMaterial( {color: 0xff0000} );
@@ -49,8 +45,6 @@ function placeLandscape() {
 
 function checkForLoading() {
 	if(starsLoaded && constLoaded) {
-		placeLandscape();
-		placeSpace();
 		lookAtConstellation();
 		setTimeout(function(){
 			 drawConstellation();
@@ -61,7 +55,7 @@ function checkForLoading() {
 		document.getElementById("constellation-input").focus();
 		//Start the timer
 		var timerSpan = document.getElementById("timer").getElementsByTagName("span")[0];
-		setInterval(function(){
+		timerInterval = setInterval(function(){
 			timer++;
 			timerSpan.innerHTML = timer.toString();
 		}, 1000);
@@ -73,11 +67,39 @@ function init() {
 	document.body.appendChild( renderer.domElement );
 	window.addEventListener( 'resize', onWindowResize, false );
 	
+	placeLandscape();
 	placeStars();
 	placeConstellation();
 
 }
 
 function checkAnswer() {
-	debugger;
+	var answer = document.getElementById("constellation-input").value;
+	var constellationForm = document.getElementById("constellation-form-container");
+	if(answer === constellationName) {
+		//The answer is correct, flash green and load a new constellation
+		constellationForm.className = "right-answer";
+		scene.remove(starGroup);
+		//Cleanup old star group
+		var objects = starGroup.children;
+		for(var i = 0; i < starGroup.children.length; i++) {
+			starGroup.children[i].geometry.dispose();
+			starGroup.children[i].material.dispose();
+			starGroup.children[i] = undefined;
+		}
+		clearTimeout(lineTimeout);
+		newConstellation = true;
+		constellationPositions = [];
+		constLoaded = false;
+		placeConstellation();
+		timer = 0;
+		clearInterval(timerInterval);
+	} else {
+		//Wrong answer, make the box flash red
+		constellationForm.className = "wrong-answer";
+	}
+	
+	setTimeout(function() {
+		constellationForm.className = "";
+	}, 1000);
 }
