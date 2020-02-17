@@ -5,8 +5,8 @@ var averageZ = 0;
 var constellationName = '';
 var starGroup = null;
 var newConstellation = false;
-var lineTimeout = null;
 var line = [];
+var lineTimeout;
 
 function placeStars() {
 	makeRequest('/sky' + window.location.search)
@@ -50,6 +50,7 @@ function placeStars() {
 
 function placeConstellation() {
 	starGroup = new THREE.Group();
+	constellationPositions = [];
 	makeRequest('/constellation' + window.location.search)
 		.then(result => {
 			newConstellation = false;

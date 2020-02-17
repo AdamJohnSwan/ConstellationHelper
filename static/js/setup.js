@@ -87,13 +87,12 @@ function checkAnswer() {
 			starGroup.children[i].material.dispose();
 			starGroup.children[i] = undefined;
 		}
-		clearTimeout(lineTimeout);
 		newConstellation = true;
-		constellationPositions = [];
-		constLoaded = false;
-		placeConstellation();
 		timer = 0;
 		clearInterval(timerInterval);
+		clearTimeout(lineTimeout);
+		placeConstellation();
+
 	} else {
 		//Wrong answer, make the box flash red
 		constellationForm.className = "wrong-answer";
