@@ -6,6 +6,7 @@ var constellationName = '';
 var starGroup = null;
 var newConstellation = false;
 var lineTimeout = null;
+var line = [];
 
 function placeStars() {
 	makeRequest('/sky' + window.location.search)
@@ -116,6 +117,7 @@ function lookAtConstellation() {
 
 function drawConstellation() {
 	oldPos = null;
+	line = [];
 	for(var idx = 0; idx < constellationPositions.length; idx++) {
 		var pos = constellationPositions[idx];
 		if(idx !== 0) {
@@ -126,22 +128,21 @@ function drawConstellation() {
 			var y2 = pos.y
 			var z2 = pos.z
 		
+			// Distance is split into a bunch of segments. The new segment will be created by the old segment divided by the distance between
+			// the end of the line and the second star.
+			// This is so the line is drawn quickly in the beginning but slows down near the end.
 			var originalDistance = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2) + Math.pow(z2 - z1, 2));
 			var segment = originalDistance / 200
 			
-			var lineGeometry = new THREE.Geometry();
-			var line = new THREE.Line( THREE.Vector3(x1, y1, z1), new THREE.LineBasicMaterial( {color: 0xffffff, linewidth: 1.5}) );
-			starGroup.add(line);
-			
-			drawLine(segment, x1, x2, y1, y2, z1, z2, lineGeometry)
+			drawLine(segment, x1, x2, y1, y2, z1, z2, idx)
 		}
 		oldPos = pos
 	}
 }
 
-function drawLine(segment, x1, x2, y1, y2, z1, z2) {
-	lineTimeout = setTimeout(
-	function() {
+function drawLine(segment, x1, x2, y1, y2, z1, z2, idx) {
+	lineTimeout = setTimeout(function() {
+		// Answer has been guessed and there is a new constellation. So stop drawing lines.
 		if(newConstellation) {
 			return;
 		}
@@ -150,12 +151,28 @@ function drawLine(segment, x1, x2, y1, y2, z1, z2) {
 		var x3 = x1 + s * (x2 - x1);
 		var y3 = y1 + s * (y2 - y1);
 		var z3 = z1 + s * (z2 - z1);
-		//var lineGeometry = new THREE.Geometry();
-		lineGeometry.vertices.push(new THREE.Vector3(x1, y1, z1));
+		
+		var lineGeometry = new THREE.Geometry();
+
+		if(line[idx] !== undefined) {
+			// Use the starting point of the old line as the starting point of this new line.
+			// This is so the starting point will always be the star's position,
+			// gradually drawing a longer and longer line until it reaches the other star's position
+			lineGeometry.vertices.push(line[idx].geometry.vertices[0]);
+			
+			//Remove the old line. This is so memory isn't eaten up by thousands of tiny lines
+			starGroup.remove(line[idx]);
+			line[idx].geometry.dispose();
+			line[idx].material.dispose();
+		}
+		
 		lineGeometry.vertices.push(new THREE.Vector3(x3, y3, z3));
-		//var line = new THREE.Line( lineGeometry, new THREE.LineBasicMaterial( {color: 0xffffff, linewidth: 1.5}) );
+		line[idx] = new THREE.Line( lineGeometry, new THREE.LineBasicMaterial( {color: 0xffffff, linewidth: 1.5}) );
+		starGroup.add(line[idx]);
+		
+		// Re-draw the line only if the end of the line is more than 0.01 in distance from the second star
 		if(distance > 0.01) {
-			drawLine(segment, x3, x2, y3, y2, z3, z2)
+			drawLine(segment, x3, x2, y3, y2, z3, z2, idx)
 		}
 	}, 100);
 }
