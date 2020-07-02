@@ -17,7 +17,7 @@ def prepare(latitude, longitude):
 	earth = planets['earth']
 	watcher = earth + Topos(latitude_degrees=latitude, longitude_degrees=longitude)
 
-	ts = load.timescale()
+	ts = load.timescale(builtin=True)
 	today = date.today()
 	t = ts.utc(today.year, today.month, today.day, 10, 00, 00)
 	return df, t, watcher

@@ -1,2 +1,6 @@
 skyfield-data/*
 __pycache__
+bin/
+include/
+lib/
+share/
