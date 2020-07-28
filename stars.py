@@ -4,7 +4,6 @@ from datetime import date
 import json
 import random
 import os
-import pdb
 
 folder = os.path.dirname(os.path.realpath(__file__))
 
@@ -42,8 +41,6 @@ def constellation(latitude, longitude, name=None):
 		astrometric = watcher.at(t).observe(star)
 		apparent = astrometric.apparent()
 		star_alt, star_az, distance = apparent.altaz()
-		if(star_alt.degrees < 0):
-			return constellation(latitude, longitude)
 		locations.append({
 			"alt": star_alt.radians,
 			"azm": star_az.radians,
@@ -70,11 +67,10 @@ def sky(latitude, longitude):
 		astrometric = watcher.at(t).observe(star)
 		apparent = astrometric.apparent()
 		star_alt, star_az, distance = apparent.altaz()
-		if(star_alt.degrees > 0):
-			locations.append({
-				"alt": star_alt.degrees,
-				"azm": star_az.degrees,
-				"mag": df.iloc[i]['magnitude']
-			})
+		locations.append({
+			"alt": star_alt.degrees,
+			"azm": star_az.degrees,
+			"mag": df.iloc[i]['magnitude']
+		})
 			
 	return json.dumps({"stars": locations})
