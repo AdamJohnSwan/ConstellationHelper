@@ -25,8 +25,8 @@ function placeStars() {
 						size = 0.2
 					}
 					let sprite = new THREE.Sprite( spriteMaterial );
-					sprite.rotateY(star.azm * (Math.PI / 180))
-					sprite.rotateX(star.alt * (Math.PI / 180))
+					sprite.rotateY(star.azm);
+					sprite.rotateX(star.alt);
 					sprite.translateZ(-100);
 					sprite.scale.set(size, size, 1.0)
 					scene.add( sprite );
@@ -52,12 +52,12 @@ function placeConstellation() {
 				constellationName = result[1].constellation;
 				var stars = result[1].stars;
 				var spriteMaterial = new THREE.SpriteMaterial( { color: 0xffffff } );
-				stars.forEach(function(star) {
+				stars.forEach(function(star, starIndex) {
 					var sprite = new THREE.Sprite( spriteMaterial );
+					sprite.rotateY(star.azm);
 					sprite.rotateX(star.alt);
-					sprite.rotateY(star.azm)
 					sprite.translateZ(-100);
-					
+
 					sprite.scale.set(2.0, 2.0, 1.0)
 					starGroup.add( sprite );
 					//Add to an array so lines can be drawn later
