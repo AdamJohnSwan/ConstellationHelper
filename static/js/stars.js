@@ -20,24 +20,16 @@ function placeStars() {
 				});
 				var spriteMaterial = new THREE.SpriteMaterial( { color: 0xffffff } );
 				stars.forEach(function(star) {
-					size = Math.abs(star.mag - 6) / 4
+					let size = Math.abs(star.mag - 6) / 4
 					if(size < 0.2) {
 						size = 0.2
 					}
-					var geometry = new THREE.CircleBufferGeometry( size, 6 );
-					var sphere = new THREE.Mesh( geometry, material );
-					
-					sphere.rotateY(star.azm * (Math.PI / 180))
-					sphere.rotateX(star.alt * (Math.PI / 180))
-					sphere.translateZ(-100);
-					var sprite = new THREE.Sprite( spriteMaterial );
-					sprite.position.set(sphere.position.x, sphere.position.y, sphere.position.z)
+					let sprite = new THREE.Sprite( spriteMaterial );
+					sprite.rotateY(star.azm * (Math.PI / 180))
+					sprite.rotateX(star.alt * (Math.PI / 180))
+					sprite.translateZ(-100);
 					sprite.scale.set(size, size, 1.0)
 					scene.add( sprite );
-					//Remove the temp sphere from memory
-					sphere.geometry.dispose();
-					sphere.material.dispose();
-					sphere = undefined;
 				});
 				starsLoaded = true;
 				checkForLoading();
@@ -51,7 +43,7 @@ function placeStars() {
 function placeConstellation() {
 	starGroup = new THREE.Group();
 	constellationPositions = [];
-	makeRequest('/constellation' + window.location.search)
+	makeRequest('/constellation' + window.location.search) 
 		.then(result => {
 			newConstellation = false;
 			if (result[0] === 1) {
