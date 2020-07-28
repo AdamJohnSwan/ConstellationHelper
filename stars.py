@@ -19,7 +19,7 @@ def prepare(latitude, longitude):
 
 	ts = load.timescale(builtin=True)
 	today = date.today()
-	t = ts.utc(today.year, today.month, today.day, 10, 00, 00)
+	t = ts.utc(today.year, today.month, today.day, 22, 00, 00)
 	return df, t, watcher
 
 def constellation(latitude, longitude, name=None):
@@ -45,8 +45,8 @@ def constellation(latitude, longitude, name=None):
 		if(star_alt.degrees < 0):
 			return constellation(latitude, longitude)
 		locations.append({
-			"alt": star_alt.degrees,
-			"azm": star_az.degrees,
+			"alt": star_alt.radians,
+			"azm": star_az.radians,
 			"mag": df.iloc[i]['magnitude']
 		})
 	print(name)

@@ -36,9 +36,9 @@ function updateDirection() {
 
 function placeLandscape() {
 	var geometry = new THREE.PlaneGeometry(200, 200);
-	var material = new THREE.MeshBasicMaterial( {color: 0xff0000} );
+	var material = new THREE.MeshBasicMaterial( { color: 0xff0000 });
 	var plane = new THREE.Mesh( geometry, material );
-	plane.position.y = -5;
+	plane.position.y = -1;
 	plane.rotateX(-90 * (Math.PI / 180));
 	scene.add(plane);
 }

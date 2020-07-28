@@ -59,32 +59,21 @@ function placeConstellation() {
 			} else if (result[0] === 0) {
 				constellationName = result[1].constellation;
 				var stars = result[1].stars;
-				var sphereMaterial = new THREE.MeshBasicMaterial({
-					color: 0xffffff
-				});
 				var spriteMaterial = new THREE.SpriteMaterial( { color: 0xffffff } );
-				var circleGeometry = new THREE.CircleBufferGeometry( 2, 6 );
-				oldSphere = null;
 				stars.forEach(function(star) {
-					var sphere = new THREE.Mesh( circleGeometry, sphereMaterial );
-					
-					sphere.rotateY(star.azm * (Math.PI / 180))
-					sphere.rotateX(star.alt * (Math.PI / 180))
-					sphere.translateZ(-100);
 					var sprite = new THREE.Sprite( spriteMaterial );
-					sprite.position.set(sphere.position.x, sphere.position.y, sphere.position.z)
-					sprite.scale.set(2, 2, 1.0)
+					sprite.rotateX(star.alt);
+					sprite.rotateY(star.azm)
+					sprite.translateZ(-100);
+					
+					sprite.scale.set(2.0, 2.0, 1.0)
 					starGroup.add( sprite );
 					//Add to an array so lines can be drawn later
-					constellationPositions.push(sphere.position);
+					constellationPositions.push(sprite.position);
 					//Get the average vector to know where to point the observer
-					averageX = averageX + sphere.position.x;
-					averageY = averageY + sphere.position.y;
-					averageZ = averageZ + sphere.position.z;
-					//Remove the temp sphere from memory
-					sphere.geometry.dispose();
-					sphere.material.dispose();
-					sphere = undefined;
+					averageX = averageX + sprite.position.x;
+					averageY = averageY + sprite.position.y;
+					averageZ = averageZ + sprite.position.z;
 				});
 				scene.add(starGroup);
 				averageX = averageX / stars.length;
